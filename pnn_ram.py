@@ -3,6 +3,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import operator
 
+def menu():
+    print("====MENU=====")
+    print("1. Visualisasi Data Training")
+    n = input("Masukkan Angka")
+    n = int(n)
+
+    if n == 1:
+        visualisasi()
+
+
 arr = []
 berkas = open ("data_train_PNN.txt","r")
 data = berkas.readlines()
@@ -25,6 +35,8 @@ z1 = []
 x2 = []
 y2 = []
 z2 = []
+
+
 def visualisasi():
     #konversi data string ke integer
     for i in range(0,150):
@@ -57,6 +69,7 @@ def visualisasi():
     berkas.close()
 
     graf = plt.figure()
+    graf.canvas.set_window_title('Visualisasi Data Training')
     data = graf.add_subplot(111, projection='3d')
     data.set_xlabel('Attr 1')
     data.set_ylabel('Attr 2')
@@ -66,8 +79,10 @@ def visualisasi():
     data.scatter(x2, y2, z2, c='b', marker='^')
     plt.show()
 
-input('Masukkan angka')
-visualisasi()
+
+
+menu()
+
 
 
 
