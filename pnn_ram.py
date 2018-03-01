@@ -43,7 +43,7 @@ x2 = []
 y2 = []
 z2 = []
 jum = []
-e =[]
+hsl = []
 def klasifikasi():
     for i in range(0, 150):
         x = arr[i][3]
@@ -88,7 +88,7 @@ def visualisasi(cnol,csatu,cdua):
 
 
 def smooth(cnol,csatu,cdua):
-    g = 1
+    g = 0.75
     dis1 = []
     dis2 = []
     dis3 = []
@@ -109,9 +109,9 @@ def smooth(cnol,csatu,cdua):
                 d = math.sqrt(w)
                 #Tampung di array buat cari minimum
                 findMin.append(d)
-        if (arr[i][3] == 1) :
+        if (arr[i][3] == 0) :
             dis1.append(min(findMin))
-        elif (arr[i][3] == 2) :
+        elif (arr[i][3] == 1) :
             dis2.append(min(findMin))
         else :
             dis3.append(min(findMin))
@@ -129,36 +129,36 @@ def keputusan(cnol,csatu,cdua):
                 brs = y.split()
                 arr2.append([float(brs[0]), float(brs[1]), float(brs[2])])
             attr2 += 1
-    # e.append(len(cnol),len(csatu),len(cdua))
+
     pjg0 = len(cnol)
     pjg1 = len(csatu)
     pjg2 = len(cdua)
+    # print("pjg2",pjg2)
     n = [pjg0,pjg1,pjg2]
+
     for z in range(len(arr2)):
        peluang = [0.0, 0.0, 0.0]
-
-
        for i in range(len(arr)):
             a = 0.0
             m = 3 #Banyak kelas
             kelas = int(arr[i][3])
+            # kelas = 0
             for j in range(0, 3):
-                a = a + float(pow((float(arr2[z][j]) - float(arr[i][j])), 2))
-            # print(jum[1][kelas - 1])
-            # print(jum[0][kelas])
+                a = a+float(pow((float(arr2[z][j]) - float(arr[i][j])), 2))
             rumus1 = 1 / pow(2*math.pi, m/2) * pow(jum[0][kelas],m)*n[kelas]
             b = 2 *(pow(jum[0][kelas],2))
             form = math.exp(-(a / b))
-            l = rumus1 * form
-            peluang[kelas] = peluang[kelas] + l
-
-            print(peluang.index(max(peluang)))
-            # b = 2 * (pow(jum[kelas - 1], 2))
-            # d = 1 / (pow(2 * math.pi, p / 2) * pow(jum[kelas - 1], p) * n[kelas - 1])
-            # form = math.exp(-(a / b))
-            # x = d * form
-            # peluang[kelas - 1] = peluang[kelas - 1] + x
+            u = rumus1 * form
+            peluang[kelas] = peluang[kelas] + u
+       # print(max(peluang))
+       # print(peluang)
        # print(peluang.index(max(peluang)))
+       hsl.append(peluang.index(max(peluang)))
+
+       f = open("prediksi.txt","w")
+       f.write("\n".join(map(lambda x: str(x), hsl)) + "\n")
+       f.close()
+
    # menu()
 klasifikasi()
 smooth(cnol,csatu,cdua)
