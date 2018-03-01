@@ -7,7 +7,7 @@ import math
 def menu():
     print("====MENU=====")
     print("1. Visualisasi Data Training")
-    print("2. Perhitungan Data Training")
+    print("2. Keputusan Data Testing")
     n = input("Masukkan Angka")
     n = int(n)
 
@@ -16,8 +16,8 @@ def menu():
         visualisasi(cnol,csatu,cdua)
     elif n == 2:
         smooth(cnol,csatu,cdua)
-    elif n == 3:
-        keputusan(jum)
+        # keputusan(jum)
+
 
 arr = []
 attr = 0
@@ -43,7 +43,7 @@ x2 = []
 y2 = []
 z2 = []
 jum = []
-
+e =[]
 def klasifikasi():
     for i in range(0, 150):
         x = arr[i][3]
@@ -115,11 +115,11 @@ def smooth(cnol,csatu,cdua):
             dis2.append(min(findMin))
         else :
             dis3.append(min(findMin))
-        jum.append([float((g * sum(dis1)) / pjg0), float((g * sum(dis2)) / pjg1), float((g * sum(dis3)) / pjg2)])
+        # print(dis1)
+    jum.append([float((g * sum(dis1)) / pjg0), float((g * sum(dis2)) / pjg1), float((g * sum(dis3)) / pjg2)])
 
-        return jum
 
-def keputusan(jum):
+def keputusan(cnol,csatu,cdua):
     arr2 = []
     attr2 = 0
     with open("data_test_PNN.txt", "r") as berkas:
@@ -129,12 +129,38 @@ def keputusan(jum):
                 brs = y.split()
                 arr2.append([float(brs[0]), float(brs[1]), float(brs[2])])
             attr2 += 1
+    # e.append(len(cnol),len(csatu),len(cdua))
+    pjg0 = len(cnol)
+    pjg1 = len(csatu)
+    pjg2 = len(cdua)
+    n = [pjg0,pjg1,pjg2]
+    for z in range(len(arr2)):
+       peluang = [0.0, 0.0, 0.0]
 
 
+       for i in range(len(arr)):
+            a = 0.0
+            m = 3 #Banyak kelas
+            kelas = int(arr[i][3])
+            for j in range(0, 3):
+                a = a + float(pow((float(arr2[z][j]) - float(arr[i][j])), 2))
+            # print(jum[1][kelas - 1])
+            # print(jum[0][kelas])
+            rumus1 = 1 / pow(2*math.pi, m/2) * pow(jum[0][kelas],m)*n[kelas]
+            b = 2 *(pow(jum[0][kelas],2))
+            form = math.exp(-(a / b))
+            l = rumus1 * form
+            peluang[kelas] = peluang[kelas] + l
 
-# menu()
+            print(peluang.index(max(peluang)))
+            # b = 2 * (pow(jum[kelas - 1], 2))
+            # d = 1 / (pow(2 * math.pi, p / 2) * pow(jum[kelas - 1], p) * n[kelas - 1])
+            # form = math.exp(-(a / b))
+            # x = d * form
+            # peluang[kelas - 1] = peluang[kelas - 1] + x
+       # print(peluang.index(max(peluang)))
+   # menu()
 klasifikasi()
 smooth(cnol,csatu,cdua)
-
-keputusan(jum)
+keputusan(cnol,csatu,cdua)
 
